@@ -1,0 +1,137 @@
+
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - jsFiddle demo</title>
+
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/1.7.4/dojo/dojo.js' djConfig="parseOnLoad: true, locale: 'en-us'"></script>
+  
+<script>
+ dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dojox.grid.EnhancedGrid");
+dojo.require("dojo.data.ItemFileWriteStore");
+dojo.require("dojox.grid.enhanced.plugins.NestedSorting");
+dojo.require("dojox.grid.enhanced.plugins.Menu");
+dojo.require("dijit.Menu");
+dojo.require("dijit.layout.BorderContainer");
+dojo.require("dojox.layout.ContentPane");
+</script>    
+
+<style type='text/css'>
+@import url('http://ajax.googleapis.com/ajax/libs/dojo/1.7.4/dojox/grid/enhanced/resources/tundra/EnhancedGrid.css');
+@import url('http://ajax.googleapis.com/ajax/libs/dojo/1.7.4/dijit/themes/tundra/tundra.css');
+</style>
+
+<style type="text/css">
+	html, body { overflow: auto; width: 100%; height: 100%; margin: 0; }
+</style>
+
+<script>
+	function createMenu(){
+		var sMenu = new dijit.Menu({});
+		var pSubMenu = new dijit.Menu();
+		// Para enviar por mail
+		pSubMenu.addChild(new dijit.MenuItem({
+			label: "email 1",
+			onClick: function(e){
+				alert(1)
+			}
+		}));
+
+		pSubMenu.addChild(new dijit.MenuItem({
+			label: "email 2",
+			onClick: function(e){
+				alert(2)
+			}
+		}));
+
+		// Añadimos el submenu a la entrada de SendTo
+		sMenu.addChild(new dijit.PopupMenuItem({
+			label: "SendTo",
+			popup: pSubMenu
+		}));
+
+	sMenu.addChild(new dijit.MenuItem({
+		label: "Open"
+	}))
+	sMenu.startup();
+	return sMenu;
+}
+</script>
+   </head>
+ <body class="tundra eco">
+
+  <div id="BorderContainerLevel1" dojoType="dijit.layout.BorderContainer" style="width: 100%; height: 100%; background: none; border:none; padding:10px 0px 0px 0px;">
+   <div id="pane-test-1" dojoType="dijit.layout.ContentPane" region="top" style="height: 105px; "><!-- z-index:10-->
+    La cabecera
+    <button dojoType="dijit.form.Button" type="button" onclick='launch()'>Create grid</button>
+    <button dojoType="dijit.form.Button" type="button" onclick='launchMenu()'>Create Menu</button>
+   </div>
+    <script>
+
+function launch(){
+    var layout = [[
+        {
+        name: '&nbsp;',
+        hidden: true,
+        field: 'idDocument'},
+    {
+        name: '&nbsp;',
+        field: 'contentType',
+        width: '8%'},
+    {
+        name: "Name",
+        field: 'name',
+        width: '62%'},
+    {
+        name: "Date",
+        field: 'date',
+        width: '20%'},
+    {
+        name: "Size",
+        field: 'size',
+        width: '10%'}
+    ]];
+    var i = 0;
+
+    var gridId = "grid_" + i
+
+    var grid = new dojox.grid.EnhancedGrid({
+        id: gridId,
+        query: {
+            idDocument: '*'
+        },
+        title:"titulo",
+        structure: layout
+    })
+    bankerTabContainer.addChild(grid)
+    grid.startup();
+    
+    
+    var myJson = {"identifier":"idDocument","items":[{"contentType":"pdf","date":"2011-10-26T16:10:45","documentType":"USERDOCUMENT","documentTypeDescription":"User Document","idDocument":534044,"idUser":"OFFMARA","name":"test II Modules.pdf","size":15704}]}
+        grid.setStore(new dojo.data.ItemFileWriteStore({
+                data: myJson
+            }));
+
+}
+  </script>
+<div dojoType="dijit.layout.TabContainer" id="bankerTabContainer" jsId="bankerTabContainer" style="height: 100%;width: 100%; border: 0px; padding: 0px;" region="center"></div>
+
+
+
+  </div>
+
+<script>
+function launchMenu(){
+	dijit.byId('BorderContainerLevel1').resize();
+	var menu1 = createMenu();
+	menu1.bindDomNode(dojo.byId("pane-test-1"));
+}
+</script>
+ </body>
+</html>
